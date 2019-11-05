@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1032563513919",
+    "firebase_url": "https://teste-d492f.firebaseio.com",
+    "project_id": "teste-d492f",
+    "storage_bucket": "teste-d492f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032563513919:android:fe44b612b15be9afd9768a",
+        "android_client_info": {
+          "package_name": "br.com.ecommercejordann.my_ecommerce_jordann"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032563513919-ur1gl7sg39i2t73ajnjnh6s308lk8rcl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKOEIqVlTlDt3FCVm3Rj9ZcWkOp_l-mX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032563513919-ur1gl7sg39i2t73ajnjnh6s308lk8rcl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
