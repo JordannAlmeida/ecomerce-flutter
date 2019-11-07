@@ -16,6 +16,8 @@ class _ProductScreenState extends State<ProductScreen> {
   
   final ProductData product;
 
+  String sizeSelected;
+
   _ProductScreenState(this.product);
 
   @override
@@ -59,6 +61,63 @@ class _ProductScreenState extends State<ProductScreen> {
                 ),
                 Text("Tamanho",
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  height: 34.0,
+                  child: GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      mainAxisSpacing: 8.0,
+                      childAspectRatio: 0.5
+                    ),
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(vertical: 4.0),
+                    children: product.sizes.map((size) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            sizeSelected = size;
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                            border: Border.all(color: sizeSelected == size ? primaryColor : Colors.grey[500], width: 4.0)
+                          ),
+                          alignment: Alignment.center,
+                          width: 50.0,
+                          child: Text(size),
+                        )
+                      );
+                    }).toList()
+                  ),
+                ),
+                SizedBox(height: 16.0,),
+                SizedBox(
+                  height: 44.0,
+                  child: RaisedButton(
+                    onPressed: sizeSelected != null ? (){
+                      
+                    } : null,
+                    child: Text("Adicionar ao carrinho",
+                      style: TextStyle(
+                        fontSize: 18.0
+                      ),
+                    ),
+                    color: primaryColor,
+                    textColor: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 16.0,),
+                Text("Descrição",
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500
+                  )
+                ),
+                Text(product.description,
+                  style: TextStyle(
+                    fontSize: 16.0
+                  )
                 )
               ],
             ),
