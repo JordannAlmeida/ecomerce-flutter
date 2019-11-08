@@ -1,0 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_ecommerce_jordann/datas/ProductData.dart';
+
+class CartProduct {
+  String cid;
+  String category;
+  String pid;
+
+  int quantity;
+  String size;
+
+  ProductData productData;
+
+  CartProduct.fromDocument(DocumentSnapshot doc) {
+    cid = doc.documentID;
+    category = doc.data["category"];
+    pid = doc.data["pid"];
+    quantity = doc.data["quantity"];
+    size = doc.data["size"];
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "category": category,
+      "pid": pid,
+      "quantity": quantity,
+      "size": size,
+      "product": productData.toResumeMap()
+    };
+  }
+
+}

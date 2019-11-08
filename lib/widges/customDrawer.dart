@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_ecommerce_jordann/models/userModel.dart';
 import 'package:my_ecommerce_jordann/screens/logginSreen.dart';
 import 'package:my_ecommerce_jordann/tiles/drawerTile.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class CustomDrawer extends StatelessWidget {
   
@@ -45,18 +47,28 @@ class CustomDrawer extends StatelessWidget {
                     Positioned(
                       left: 0.0,
                       bottom: 0.0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Olá", style: TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
-                          GestureDetector(
-                            child: Text("Entre ou cadastre-se", style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 16.0, fontWeight:  FontWeight.bold)),
-                            onTap: (){
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
-                            },
-                          )
-                        ],
-                      ),
+                      child: ScopedModelDescendant<UserModel>(
+                        builder: (context, child, model) {
+                          String nameUser = model.userData["name"];
+                          String helloUser = model.isLoggedin() ? "Olá $nameUser" : "Olá";
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(helloUser, style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+                              GestureDetector(
+                                child: Text(model.isLoggedin() ? "sair" : "Entre ou cadastre-se", style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 16.0, fontWeight:  FontWeight.bold)),
+                                onTap: (){
+                                  if(model.isLoggedin()) {
+                                    model.singOut();
+                                  } else{
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
+                                  }
+                                },
+                              )
+                            ],
+                          );
+                        },
+                      )
                     )
                   ],
                 ),

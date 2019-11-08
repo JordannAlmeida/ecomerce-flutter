@@ -13,19 +13,25 @@ class UserModel extends Model {
 
   bool isLoading = false;
 
-  void singUp ({@required Map<String, dynamic> userData, @required String pass, @required VoidCallback onSucces, @required VoidCallback onFail}) {
+  @override
+  void addListener(VoidCallback listener){
+    super.addListener(listener);
+
+    _collectUserData();
+  }
+
+  void singUp ({@required Map<String, dynamic> userData, @required String pass, @required VoidCallback onSuccess, @required VoidCallback onFail}) {
       isLoading = true;
       notifyListeners();
 
       _auth.createUserWithEmailAndPassword(email: userData["email"], password: pass)
       .then((user) async {
         firebaseUser = user;
-
+        this.userData = userData;
         await _saveUserData(userData);
-
-        onSucces();
         isLoading = false;
         notifyListeners();
+        onSuccess();
       }).catchError((onError) {
         onFail();
         isLoading = false;
@@ -33,20 +39,57 @@ class UserModel extends Model {
       });
   }
 
-  void singIn() {
+  void singIn({@required String email, @required String pass, @required VoidCallback onSuccess, VoidCallback onFail}) {
+    isLoading = true;
+    notifyListeners();
 
+    _auth.signInWithEmailAndPassword(email: email, password: pass).then((user) async {
+      firebaseUser = user;
+      isLoading = false;
+      await _collectUserData();
+      notifyListeners();
+      onSuccess();
+    }).catchError((error) {
+      isLoading = false;
+      notifyListeners();
+      onFail();
+    });
   }
 
-  void recoverPass() {
-
+  void recoverPass(String email) {
+    _auth.sendPasswordResetEmail(email: email);
   }
 
   bool isLoggedin () {
-
+    return firebaseUser != null;
   }
 
   Future<Null> _saveUserData(Map<String, dynamic> userData) async {
     this.userData = userData;
     await Firestore.instance.collection("users").document(firebaseUser.uid).setData(userData);
   }
+
+  void singOut() async{
+    await _auth.signOut();
+    
+    userData = Map();
+    firebaseUser = null;
+
+    notifyListeners();
+  }
+
+  Future<Null> _collectUserData() async{
+    if(firebaseUser == null) {
+      firebaseUser = await _auth.currentUser();
+    }
+    if(firebaseUser != null) {
+      if(userData["name"] == null) {
+        DocumentSnapshot docUser = await Firestore.instance.collection("users").document(firebaseUser.uid).get();
+        userData = docUser.data;
+      }
+      notifyListeners();
+    }
+  }
+
+  
 }

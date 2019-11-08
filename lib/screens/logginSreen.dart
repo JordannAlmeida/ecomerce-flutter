@@ -3,9 +3,17 @@ import 'package:my_ecommerce_jordann/models/userModel.dart';
 import 'package:my_ecommerce_jordann/screens/registerSreen.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class LoginScreen extends StatelessWidget {
-  
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final _emailController = TextEditingController();
+  final _passController = TextEditingController();
   
   @override
   Widget build(BuildContext context) {
@@ -13,6 +21,7 @@ class LoginScreen extends StatelessWidget {
     final Color primaryColor = Theme.of(context).primaryColor;
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Entrar"),
         centerTitle: true,
@@ -44,6 +53,7 @@ class LoginScreen extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(bottom: 20.0),
                   child: TextFormField(
+                    controller: _emailController,
                     decoration: InputDecoration(hintText: "E-mail"),
                     keyboardType: TextInputType.emailAddress,
                     validator: (text){
@@ -54,6 +64,7 @@ class LoginScreen extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(bottom: 5.0),
                   child: TextFormField(
+                    controller: _passController,
                     decoration: InputDecoration(hintText: "Senha"),
                     obscureText: true,
                     validator: (text){
@@ -63,7 +74,26 @@ class LoginScreen extends StatelessWidget {
                 ),
                 Align(alignment: Alignment.centerRight,
                   child: FlatButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      if(_emailController.text.isEmpty) {
+                        _scaffoldKey.currentState.showSnackBar(
+                          SnackBar(
+                            content: Text("Insira seu e-mail para verificação"),
+                            backgroundColor: Colors.redAccent,
+                            duration: Duration(seconds: 2),
+                          )
+                        );
+                      } else {
+                        model.recoverPass(_emailController.text);
+                        _scaffoldKey.currentState.showSnackBar(
+                          SnackBar(
+                            content: Text("Confira a caixa de entrada do seu email"),
+                            backgroundColor: Theme.of(context).primaryColor,
+                            duration: Duration(seconds: 3),
+                          )
+                        );
+                      }
+                    },
                     child: Text("Esqueci minha senha",
                       textAlign: TextAlign.right,
                       style: TextStyle(color: primaryColor),
@@ -80,7 +110,7 @@ class LoginScreen extends StatelessWidget {
                     color: primaryColor,
                     onPressed: (){
                       if(_formKey.currentState.validate()) {
-                        model.singIn();
+                        model.singIn(email: _emailController.text, pass: _passController.text, onSuccess: (){ _onSuccess(); }, onFail: (){ _onFail(); });
                       }
                     },
                   ),
@@ -89,6 +119,20 @@ class LoginScreen extends StatelessWidget {
             ),
           );
         },
+      )
+    );
+  }
+
+  void _onSuccess() {
+    Navigator.of(context).pop();
+  }
+
+  void _onFail() {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text("Usuário ou senha inválidos"),
+        backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 2),
       )
     );
   }
