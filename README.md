@@ -1,16 +1,5 @@
 # my_ecommerce_jordann
 
-A new Flutter project.
+This project is a sample of a Flutter aplication. This is my first app using Flutter.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+This app has an integration module attached to firebase, in addition to the data being also managed in firebase. In this application it is possible to add several products to the shopping cart and go to the checkout screen, which has the value calculations as well as the discount to be applied according to the coupon used.
